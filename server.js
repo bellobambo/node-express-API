@@ -2,13 +2,24 @@ const express = require('express')
 const mongoose = require('mongoose')
 const Product = require('./models/productsModel')
 const app = express()
+require('dotenv').config();
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 app.get('/', (req, res) => {
-    res.send('Hello World')
-})
+    const routes = [
+        '/',
+        '/blogs',
+        '/products',
+        '/products/:id',
+        'POST /products',
+        'PUT /products/:id',
+        'DELETE /products/:id'
+    ];
+
+    res.json({ message: 'Routes available', routes });
+});
 
 app.get('/blogs', (req, res) => {
     res.send('Hello Blogs, im happy to be here')
@@ -74,8 +85,9 @@ app.delete('/products/:id', async (req, res) => {
 })
 
 
+
 mongoose.
-    connect('mongodb+srv://bellobambo21:Ayodeji2001@nodeapi.bu0hbmi.mongodb.net/nodeApi?retryWrites=true&w=majority')
+    connect(process.env.MONGO_URI)
     .then(() => {
         app.listen(3000, () => {
             console.log('Node Api app is running in port 3000')
